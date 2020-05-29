@@ -14,31 +14,36 @@
 #include <JetsonGPIO.h>
 #include <memory>
 #include <cmath>
-class Servo {
+#include <iostream>
+#include <string>
+class Servo_Jetson {
 public:
-    Servo();
-    Servo(const Servo& orig);
-    virtual ~Servo();
+    Servo_Jetson();
+    Servo_Jetson(const Servo_Jetson& orig);
+    virtual ~Servo_Jetson();
     
-    Servo(const unsigned char pin);
-    Servo(const unsigned char pin, const unsigned short minUs, const unsigned short maxUs);
-    Servo(const unsigned char pin, const unsigned short minUs, const unsigned short maxUs, const unsigned short mapMin, const unsigned short mapMax);
-    unsigned char mapAngle(const short val);
+    Servo_Jetson(int pin);
+    Servo_Jetson(std::shared_ptr<GPIO::PWM> steer, bool setup);
+    Servo_Jetson(int pin, const unsigned short minUs, const unsigned short maxUs);
+    Servo_Jetson(int pin, const unsigned short minUs, const unsigned short maxUs, const unsigned short mapMin, const unsigned short mapMax);
+    Servo_Jetson(std::shared_ptr<GPIO::PWM> steer, const unsigned short minUs, const unsigned short maxUs, const unsigned short mapMin, const unsigned short mapMax, bool setup);
+    unsigned short mapAngle(const short val);
     void writeAngle(const unsigned short angle);
     void writeUs(const unsigned short microseconds);
     void writeMappedValue(const short val);
 
 
 private:
-    unsigned char pin; 
+    int pin; 
     unsigned short angle;
     unsigned short microseconds;
     unsigned short minUs;
     unsigned short maxUs;
     short mapMin;
     short mapMax;
-    std::shared_ptr<GPIO::PWM> Drive_PWM;
-    unsigned char map(const short val);
+    std::shared_ptr<GPIO::PWM> Steer_PWM;
+    unsigned short map(const short val);
+    bool setup;
 
 };
 
